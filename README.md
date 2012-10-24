@@ -24,7 +24,8 @@ import csw.ecommerce.paypal.requests.managerecurringpaymentsprofilestatus
 import csw.ecommerce.paypal.requests.doexpresscheckoutpayment
 import csw.ecommerce.paypal.fields
 
-paypal_settings = {'user':'<your username here>','passwd':'<your password here>','sig':'<your signature here>','express_checkout':'https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=','product_desc':'Super Duper Machine v1'}
+paypal_settings = {'user':'<your username here>','passwd':'<your password here>','sig':'<your signature here>',
+	'express_checkout':'https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=','product_desc':'Super Duper Machine v1'}
 
 paypal_user = csw.ecommerce.paypal.core.BaseProfile(
 	username=paypal_settings['user'],
