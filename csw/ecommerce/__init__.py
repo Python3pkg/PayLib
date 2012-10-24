@@ -1,4 +1,4 @@
-# Copyright (C) 2011 Luca Sepe <luca.sepe@gmail.com>
+# Copyright (C) 2012 Client Side Web <rutherford@clientsideweb.net>
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""The PayPal NVP API Python Wrapper."""
+"""PayLib the easy python payments API for PayPal."""
 
-version = "0.5.0"
-version_info = (0, 5, 0)
+version = "0.1.0"
+version_info = (0, 1, 0)

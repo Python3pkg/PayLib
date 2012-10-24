@@ -538,7 +538,7 @@ class Payment( RequestFields ):
 
 	def __init__( self, amount=None, items=None ):
 		self._nvp_request = dict()
-		self._nvp_request['CURRENCYCODE'] = 'EUR'
+		self._nvp_request['PAYMENTREQUEST_%d_CURRENCYCODE'] = 'EUR'
 		self._items = list()
 		
 		if (items is None) or (len(items) == 0):
@@ -805,7 +805,7 @@ class PaymentMulti( RequestFields ):
 
 	def __init__( self, items=None ):
 		self._nvp_request = dict()
-		self._nvp_request['CURRENCYCODE'] = 'EUR'
+		self._nvp_request['PAYMENTREQUEST_%d_CURRENCYCODE'] = 'EUR'
 		self._items = list()
 		
 		if (items is None) or (len(items) == 0):

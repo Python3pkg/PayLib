@@ -31,7 +31,17 @@ class SetExpressCheckout( core.Request ):
 		on which the customer confirms the order and payment or billing agreement.
 
 		PayPal recommends that the cancel_url be the original page on which the
-		customer chose to pay with PayPal or establish a billing agreement."""
+		customer chose to pay with PayPal or establish a billing agreement.
+		
+		>>> import csw.ecommerce.paypal.fields
+		>>> import csw.ecommerce.paypal.requests.setexpresscheckout
+		>>> payment = csw.ecommerce.paypal.fields.Payment()
+		>>> payment.set_currency('USD')
+		>>> payment.set_amount('2.00')
+		>>> o = csw.ecommerce.paypal.requests.setexpresscheckout.SetExpressCheckout(payment, 'http://example.com/success','http://example.com/cancel')
+		>>> o.get_nvp_request()
+		{'CANCELURL': 'http://example.com/cancel', 'PAYMENTREQUEST_%d_AMT': '2.00', 'PAYMENTREQUEST_%d_CURRENCYCODE': 'USD', 'RETURNURL': 'http://example.com/success', 'METHOD': 'SetExpressCheckout'}
+		"""
 	
 		if payment is None or return_url is None or cancel_url is None:
 			raise ValueError( 'Arguments cannot be null' )
