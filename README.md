@@ -120,4 +120,4 @@ response = manage_recurring.get_nvp_response()
 Integrating with PayLib
 -----------------------
 
-I've written an overview showing how easy it is to create a web application earning money from the start with no outlay from yourself in [the 60 minute web app](http://aleatory.clientsideweb.net/2012/10/26/60-minute-web-app)
+I've written an overview showing how easy it is to create a web application earning money from the start with absolutely no startup costs in [the 60 minute web app](http://aleatory.clientsideweb.net/2012/10/26/60-minute-web-app)
