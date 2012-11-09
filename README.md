@@ -25,7 +25,8 @@ import csw.ecommerce.paypal.requests.doexpresscheckoutpayment
 import csw.ecommerce.paypal.fields
 
 paypal_settings = {'user':'<your username here>','passwd':'<your password here>','sig':'<your signature here>',
-	'express_checkout':'https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=','product_desc':'Super Duper Machine v1'}
+	'express_checkout':'https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=','product_desc':'Super Duper Machine v1',
+	'sandbox':True}
 
 paypal_user = csw.ecommerce.paypal.core.BaseProfile(
 	username=paypal_settings['user'],
@@ -55,7 +56,7 @@ set_ec.set_require_confirmed_shipping(False)
 set_ec.set_no_shipping(False)
 set_ec.set_max_amount('10.00')
 
-paypal = csw.ecommerce.paypal.core.PayPal(paypal_user)
+paypal = csw.ecommerce.paypal.core.PayPal(paypal_user,sandbox=settings['sandbox'])
 paypal.set_response(set_ec)
 
 # get nvp response
@@ -98,7 +99,7 @@ payer_information = csw.ecommerce.paypal.fields.PayerInformation()
 payer_information.set_email(<user email address>)
 create_recurring.set_payer_information(payer_information)
 
-paypal = csw.ecommerce.paypal.core.PayPal(paypal_user)
+paypal = csw.ecommerce.paypal.core.PayPal(paypal_user,sandbox=settings['sandbox'])
 paypal.set_response(create_recurring)
 
 # get nvp response
@@ -110,7 +111,7 @@ profile_id = response['PROFILEID'] # store for recurring payment management late
 ```python
 # cancel a subscription
 
-paypal = csw.ecommerce.paypal.core.PayPal(paypal_user)
+paypal = csw.ecommerce.paypal.core.PayPal(paypal_user,sandbox=settings['sandbox'])
 manage_recurring = csw.ecommerce.paypal.requests.managerecurringpaymentsprofilestatus.ManageRecurringPaymentsProfileStatus(profile_id,'Cancel','Cancelling Subscription')
 paypal.set_response(manage_recurring)
 

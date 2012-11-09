@@ -140,7 +140,7 @@ class PayPal( object ):
 			raise ValueError( 'profile must be an instance of <Profile> class' )
 		
 		self._profile = profile
-		self._sandbox = True
+		self._sandbox = sandbox
 		self._version = '86.0'
 		self._apiSignature = apiSignature;
 	
