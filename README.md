@@ -39,7 +39,7 @@ self.redirect(redir)
 ```
 
 ```python
-# in success_callback you recall the subscription object & create the recurring payment
+# in your success_callback url handler you recall the subscription object & create the recurring payment
 email = 'customer@example.com'
 name = 'Super Duper Annual Subscription'
 period = 'Year'
