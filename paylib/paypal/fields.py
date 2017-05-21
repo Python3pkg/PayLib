@@ -16,16 +16,14 @@
 
 
 import abc
-import StringIO
+import io
 import copy
 
 from paylib import static
 
 from paylib.paypal import util
 
-class RequestFields( object ):
-
-    __metaclass__ = abc.ABCMeta
+class RequestFields( object, metaclass=abc.ABCMeta ):
 
     @abc.abstractmethod
     def get_nvp_request( self ):    
@@ -172,7 +170,7 @@ class ShippingOptions( RequestFields ):
         
         v = util.Validator()
         if not v.is_valid_amount( amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )
@@ -367,7 +365,7 @@ class PaymentItem( RequestFields ):
         
         v = util.Validator()
         if not v.is_valid_amount( amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )
@@ -415,7 +413,7 @@ class PaymentItem( RequestFields ):
         (for example L_PAYMENTREQUEST_n_TAXAMT0, L_PAYMENTREQUEST_n_TAXAMT1)."""
         v = util.Validator()
         if not v.is_valid_amount( amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )
@@ -521,7 +519,7 @@ class PaymentItem( RequestFields ):
 
 
     def __str__( self ):
-        sb = StringIO.StringIO()
+        sb = io.StringIO()
         sb.write( 'instance of PaymentDetailsItem class with ' )
         sb.write( 'the nvpRequest values: ' )
         sb.write( str(self._nvp_request) )
@@ -742,7 +740,7 @@ class Payment( RequestFields ):
         
         i = 0
         for item in self._items:
-            for k, v in item.items():
+            for k, v in list(item.items()):
                 # KEYn VALUE 
                 # nvp['{0}{1}'.format(k,i)] = v
                 nvp[k % (payment_number,i)] = v
@@ -786,7 +784,7 @@ class Payment( RequestFields ):
     def _set_fieldamount( self, field, amount ):
         v = util.Validator()
         if not v.is_new_valid_amount( amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )
@@ -871,7 +869,7 @@ class UserSelectedOptions( RequestFields ):
             - Must have two decimal places, decimal separator must be a period (.)."""
         v = util.Validator()
         if not v.is_valid_amount( amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )

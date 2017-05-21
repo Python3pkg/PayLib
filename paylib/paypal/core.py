@@ -15,18 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import abc
-import httplib
-import urllib
-import urllib2
-import urlparse
+import http.client
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
+import urllib.parse
 import logging
-import StringIO
+import io
 import copy
 
-class Profile:
+class Profile(metaclass=abc.ABCMeta):
     """Represents paypal user - his/her password, user name etc."""
-    
-    __metaclass__ = abc.ABCMeta
     
     @abc.abstractmethod
     def get_nvp_map( self ):    
@@ -79,9 +77,7 @@ class BaseProfile( Profile ):
         return str(self._nvpMap)
 
 
-class Request( object ):
-    
-    __metaclass__ = abc.ABCMeta
+class Request( object, metaclass=abc.ABCMeta ):
     
     @abc.abstractmethod
     def get_nvp_request( self ):
@@ -103,10 +99,8 @@ class Request( object ):
         If response is not set/received returns empty Map.
         """
 
-class Transport( object ):
+class Transport( object, metaclass=abc.ABCMeta ):
     """Used for sending request and returning response."""
-    
-    __metaclass__ = abc.ABCMeta
     
     @abc.abstractmethod
     def get_response( self, urlString, msg ):
@@ -119,19 +113,19 @@ class HttpPost( Transport ):
     def get_response( self, urlString, msg, debug=False ):
         
         if debug:
-            httplib.HTTPConnection.debuglevel = 1
+            http.client.HTTPConnection.debuglevel = 1
         
         headers = {
             'Content-type': 'application/x-www-form-urlencoded',
             'Accept': 'text/plain'
         }
         
-        url = urlparse.urlparse( urlString )
+        url = urllib.parse.urlparse( urlString )
         conn = None        
         if url.scheme == 'https':
-            conn = httplib.HTTPSConnection( url.netloc, timeout=10 )
+            conn = http.client.HTTPSConnection( url.netloc, timeout=10 )
         else:
-            conn = httplib.HTTPConnection( url.netloc, 80, timeout=10 )
+            conn = http.client.HTTPConnection( url.netloc, 80, timeout=10 )
         try:
             conn.request('POST', url.path, msg, headers)
             response = conn.getresponse()
@@ -139,7 +133,7 @@ class HttpPost( Transport ):
             
             return response.read()
             
-        except httplib.HTTPException as e:
+        except http.client.HTTPException as e:
             logging.getLogger().error( e )
         finally:
             if conn: conn.close()
@@ -168,29 +162,29 @@ class PayPal( object ):
         if not isinstance(request, Request): 
             raise ValueError( 'request must be an instance of <Request> class' )
 
-        sb = StringIO.StringIO()
+        sb = io.StringIO()
         
         # profile part
         params = self._profile.get_nvp_map()
-        for k,v in params.items():
+        for k,v in list(params.items()):
             params[k] = self._encode_if_necessary( v )
-        sb.write( urllib.urlencode(params) )
+        sb.write( urllib.parse.urlencode(params) )
         del ( params )
         
         # request part
         params = request.get_nvp_request()
         if len(params) > 0: sb.write( '&' )
-        for k,v in params.items():
+        for k,v in list(params.items()):
             params[k] = self._encode_if_necessary( v )
-        sb.write( urllib.urlencode(params) )
+        sb.write( urllib.parse.urlencode(params) )
         del ( params )
         
         params = { 'VERSION': self._version }
         sb.write( '&' )
-        sb.write( urllib.urlencode(params) )
+        sb.write( urllib.parse.urlencode(params) )
         del ( params )
         
-        endpointUrl = StringIO.StringIO()
+        endpointUrl = io.StringIO()
         if self._api_signature:
             endpointUrl.write( 'https://api-3t.' )
         else:
@@ -204,7 +198,7 @@ class PayPal( object ):
         
         if response:
             responseMap = dict()
-            response = urllib2.unquote( response )
+            response = urllib.parse.unquote( response )
             for data in response.split('&'):
                 keyval = data.split( '=' )
                 responseMap[keyval[0]] = keyval[1]
@@ -232,7 +226,7 @@ class PayPal( object ):
         if ( (token is None) or (len(token) == 0) ): return None
         
         # return redirect url
-        url = StringIO.StringIO()
+        url = io.StringIO()
         url.write( 'https://www.' )
         if self._sandbox:
             url.write( 'sandbox.' )
@@ -243,6 +237,6 @@ class PayPal( object ):
         return url.getvalue()
     
     def _encode_if_necessary(self, s):
-        if isinstance(s, unicode):
+        if isinstance(s, str):
             return s.encode('utf-8')
         return s

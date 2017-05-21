@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import copy
-import StringIO
+import io
 
 from paylib.paypal import core, util, fields
 
@@ -92,7 +92,7 @@ class SetExpressCheckout( core.Request ):
               and no thousands separator."""
         vldtor = util.Validator()
         if not vldtor.is_valid_amount( max_amount ):
-            sb = StringIO.StringIO()
+            sb = io.StringIO()
             sb.write( 'Amount {0} is not valid. '.format(max_amount) )
             sb.write( 'Amount has to have exactly two decimal ' )
             sb.write( 'places seaprated by \".\" ' )
@@ -427,14 +427,14 @@ class SetExpressCheckout( core.Request ):
         # shipping options
         i = 0
         for option in self._shipping_options:
-            for k, v in option.iteritems():
+            for k, v in option.items():
                 # KEYn VALUE
                 nvp['{0}{1}'.format(k, i)] = v    
 
         # billing agreement 
         i = 0
         for agreement in self._billing_agreement:
-            for k, v in agreement.iteritems():
+            for k, v in agreement.items():
                 # KEYn VALUE
                 nvp['{0}{1}'.format(k, i)] = v
 

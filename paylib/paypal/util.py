@@ -107,7 +107,7 @@ class Validator( object ):
         if (amount is None) or (len(amount) == 0):
             raise ValueError('Amount should be a valid string of length greater than 0')
 
-        if not isinstance(amount, (str,unicode)):
+        if not isinstance(amount, str):
             raise ValueError('Amount should be a unicode string')
 
         m = re.match( self._amount_pattern, amount )
@@ -132,7 +132,7 @@ class Validator( object ):
         if (amount is None) or (len(amount) == 0):
             return False
 
-        if not isinstance(amount, (str,unicode)):
+        if not isinstance(amount, str):
             return False
 
         m = re.match( self._amount_pattern, amount )
